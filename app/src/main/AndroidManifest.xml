@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jp.ac.anan_nct.TabletInterphone"
+    android:installLocation="internalOnly"
+    android:versionCode="1"
+    android:versionName="1.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.front" />
+    <uses-feature android:name="android.hardware.bluetooth" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:name="SharedVariable"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.StartActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                
+				<category android:name="android.intent.category.HOME" />
+				<category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideModeSelectActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="管理画面"
+            android:screenOrientation="sensorLandscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideHomeSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideNightSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.ConnectionErrorDialogActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.ServiceCancelDialogActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideConnectSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideConnectRecoverActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+       	<activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsideConnectByBluetoothActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.VisiterCheckActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OutsideConnectSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+       <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OutsideConnectRecoverActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+       <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OutsideConnectByBlueToothActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.VisiterLogActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.LogListActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Inside.InsidePopDialogActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OutsidePhoneCallActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.SelectBusinessActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.WaitActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.WhoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.WaitVisiterActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.MessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OutsideShowNameActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.VisiterCameraActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.CallWaitActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.ShowWriteActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.GetOutActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.OtherActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.TalkSelectActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.WriteVisiterActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.MoreActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="jp.ac.anan_nct.TabletInterphone.Activity.Outside.ReturnActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape" />
+
+        <service
+            android:name="jp.ac.anan_nct.TabletInterphone.Service.InsideService"
+            android:label="@string/app_name" />
+        <service
+            android:name="jp.ac.anan_nct.TabletInterphone.Service.OutsideService"
+            android:label="@string/app_name" />
+    </application>
+
+</manifest>

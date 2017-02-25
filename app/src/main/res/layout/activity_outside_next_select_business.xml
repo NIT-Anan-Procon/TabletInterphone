@@ -1,0 +1,221 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ご用件は何ですか？選択してください"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+        
+        <LinearLayout
+            android:id="@+id/prePageLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/prev" />
+
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="前へ"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/firstPurposeLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/firstPurposeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/delivery_service" />
+
+			<TextView
+			    android:id="@+id/firstPurposeText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="宅配・郵便"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/secondPurposeLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/secondPurposeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/check" />
+
+			<TextView
+			    android:id="@+id/secondPurposeText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="水道・ガス点検"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/thirdPurposeLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/thirdPurposeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/money" />
+
+			<TextView
+			    android:id="@+id/thirdPurposeText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="集金"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/FourthPurposeLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/FourthPurposeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/refp" />
+
+			<TextView
+			    android:id="@+id/FourthPurposeText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="知人・近所"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/nextPageLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/next" />
+
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="次へ"
+			    android:textSize="24sp" />
+                        
+        </LinearLayout>
+        
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="25dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+        
+        <LinearLayout
+            android:id="@+id/otherLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/visiter_question" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/visiterCameraLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="right"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/camera_input" />
+                        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/visiterWriteLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="right"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/pencil" />
+                        
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
