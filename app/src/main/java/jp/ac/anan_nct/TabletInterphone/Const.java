@@ -16,9 +16,8 @@ public class Const{
 	public static final int BLUETOOTH_VISIT =			BLUETOOTH_JUDGE_CANCEL_VISIT | 1; //訪問
 	public static final int BLUETOOTH_CANCEL =			BLUETOOTH_JUDGE_CANCEL_VISIT | 2; //キャンセル
 	public static final int BLUETOOTH_MODE_HOME =		BLUETOOTH_JUDGE_MODE_SELECT | 0;  //在宅モード
-	public static final int BLUETOOTH_MODE_OUTDOOR =	BLUETOOTH_JUDGE_MODE_SELECT | 1;  //外出モード
-	public static final int BLUETOOTH_MODE_NIGHT =		BLUETOOTH_JUDGE_MODE_SELECT | 2;  //夜間モード
-
+	public static final int BLUETOOTH_MODE_NIGHT =		BLUETOOTH_JUDGE_MODE_SELECT | 1;  //夜間モード
+	public static final int BLUETOOTH_MODE_OUTDOOR =	BLUETOOTH_JUDGE_MODE_SELECT | 2;  //外出モード
 	
 	//用件
 	public static final int BUSINESS_DELIVERY_SERVICE	= 0x010001; //宅配便

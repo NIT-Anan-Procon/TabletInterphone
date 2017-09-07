@@ -1,5 +1,6 @@
 package jp.ac.anan_nct.TabletInterphone.Fragment;
 
+import jp.ac.anan_nct.TabletInterphone.Activity.Inside.LogListActivity;
 import jp.ac.anan_nct.TabletInterphone.Const;
 import jp.ac.anan_nct.TabletInterphone.R;
 import jp.ac.anan_nct.TabletInterphone.Activity.Inside.VisiterCheckActivity;
@@ -138,12 +139,14 @@ public class VisiterInteractionFragment extends BaseFragment{
 		view.findViewById(R.id.shutDownLayout).setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View view){
-				sharedVariable.wifiSocket.writeObject(Const.INTERACTION_STOP);
-				sharedVariable.service.stopService(666);
+				//sharedVariable.wifiSocket.writeObject(Const.INTERACTION_STOP);
+				//sharedVariable.service.stopService(666);
+
 			}
 		});
+
 		
-		view.findViewById(R.id.shutDownLayout).setVisibility(view.INVISIBLE);
+		//view.findViewById(R.id.shutDownLayout).setVisibility(view.INVISIBLE);
 		
 		//8/31追加
 		
@@ -179,6 +182,7 @@ public class VisiterInteractionFragment extends BaseFragment{
 			@Override
 			public void onClick(View view){
 				sharedVariable.wifiSocket.writeObject(Const.INTERACTION_FINISH);
+				//sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_CANCEL);
 					//AfterInteractionFragment fragment = new AfterInteractionFragment();
 					//Bundle args = new Bundle();
 					//args.putString("Interaction", "通信失敗：再設定してください。");
@@ -478,6 +482,6 @@ public class VisiterInteractionFragment extends BaseFragment{
 			}
 		}
 	};
-		
+
 	//*////////////////////////////////////////////////////////////
 }

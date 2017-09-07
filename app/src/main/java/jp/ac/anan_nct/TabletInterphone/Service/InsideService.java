@@ -102,6 +102,7 @@ public class InsideService extends BaseService{
 		count = 0;
 		
 		sharedVariable.ringtone.play();
+		if(bluetoothConnection!=null)bluetoothConnection.write(Const.BLUETOOTH_VISIT);
 		
 		//0511追加
 		VCTimer = new Timer();

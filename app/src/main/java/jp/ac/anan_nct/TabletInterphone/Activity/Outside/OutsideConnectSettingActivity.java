@@ -3,6 +3,7 @@ package jp.ac.anan_nct.TabletInterphone.Activity.Outside;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,38 +18,97 @@ import android.widget.NumberPicker;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import jp.ac.anan_nct.TabletInterphone.Activity.StartActivity;
+import jp.ac.anan_nct.TabletInterphone.Communication.BluetoothConnection;
 import jp.ac.anan_nct.TabletInterphone.Communication.WifiSocket;
 import jp.ac.anan_nct.TabletInterphone.Dialog.CustomDialog;
 import jp.ac.anan_nct.TabletInterphone.Dialog.DialogBuilder;
 import jp.ac.anan_nct.TabletInterphone.R;
 import jp.ac.anan_nct.TabletInterphone.Service.OutsideService;
 import jp.ac.anan_nct.TabletInterphone.SharedVariable;
+import jp.ac.anan_nct.TabletInterphone.Utility.BluetoothUtil;
 import jp.ac.anan_nct.TabletInterphone.Utility.Util;
 
 public class OutsideConnectSettingActivity extends Activity {
 	private static final Handler handler = new Handler();
-	
+
+	private Button KeyBoxBluetoothSettingButton;
 	private Button wifiSettingButton;
 	private Button startButton;
-	
+
+	private BluetoothConnection bc;
+	private BluetoothUtil bu;
+	private BluetoothDevice targetDevice = null;
+
+	private BluetoothStatus bluetoothStatus;
+	private WifiStatus wifiStatus;
+
 	private WifiSocket ws;
 	private SharedVariable sh;
-	
+
 	private String ipAddressText;
+	private int id1;
+	private int id2;
+	private int id3;
+	private int id4;
+	private long id0;
+	private long id00;
+
+	private enum BluetoothStatus{
+		ERROR("Bluetooth接続に失敗しました"),
+		CONNECTING("Bluetooth接続 : 接続中"),
+		CONNECTED("Bluetooth接続 : OK"),
+		NODEVICE("Bluetooth接続 ： なし");
+
+		private String message;
+
+		private BluetoothStatus(String message){
+			this.message = message;
+		}
+
+		public String toString(){
+			return this.message;
+		}
+	}
+
+	private enum WifiStatus{
+		ERROR("Wi-Fi接続に失敗しました"),
+		CONNECTING("Wi-Fi接続 : 接続待機中"),
+		CONNECTED("Wi-Fi接続 : OK");
+
+		private String message;
+
+		private WifiStatus(String message){
+			this.message = message;
+		}
+
+		public String toString(){
+			return this.message;
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_outside_connect_setting);
 
+		KeyBoxBluetoothSettingButton = (Button) findViewById(R.id.KeyBoxBluetoothSettingButton);
 		wifiSettingButton = (Button) findViewById(R.id.wifiSettingButton);
 		startButton = (Button) findViewById(R.id.endPhoneCallButton);
 		sh = (SharedVariable) this.getApplication();
 		startButton.setEnabled(true);
+
+		KeyBoxBluetoothSettingButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showBluetoothSelectDialog();
+			}
+		});
 
 		wifiSettingButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -67,18 +127,73 @@ public class OutsideConnectSettingActivity extends Activity {
 	}
 	
 	private void quickstart(){
-		startActivity(new Intent(this, OutsideConnectByBlueToothActivity.class));
-		finish();
+		this.ipAddressText = ConfigRead();
+
+		Log.d("idid","idid" + ipAddressText + "idid");
+
+		id00 = Long.parseLong(ipAddressText);
+		id1 = (int)(id00 / 1000000000l);
+		id0 = id1 * 1000;
+		id00 = Long.parseLong(ipAddressText);
+		id00 = (id00 / 1000000l);
+		id2 = (int)(id00 - id0);
+		id0 = Long.parseLong(ipAddressText);
+		id0 = (id0 / 1000l);
+		id3 = (int)(id0 - (id00 * 1000l));
+		id00 = Long.parseLong(ipAddressText);
+		id4 = (int)(id00 - (id0 * 1000l));
+
+		Log.d("idid","idid" + id1 + "idid");
+		Log.d("idid","idid" + id2 + "idid");
+		Log.d("idid","idid" + id3 + "idid");
+		Log.d("idid","idid" + id4 + "idid");
+		//this.ipAddressText = Util.getIpAddressText(192, 168, 111, 101);
+		this.ipAddressText = Util.getIpAddressText(id1, id2, id3, id4);
+		sh.selectBusinessFlag = 0x00;
+		sh.sharedIPadressText = this.ipAddressText;
+		startConnect();
+		//startActivity(new Intent(this, OutsideConnectByBlueToothActivity.class));
+		//finish();
+	}
+
+	private String ConfigRead(){
+		String adress = "192168000013";
+
+		String filePath = Environment.getExternalStorageDirectory() +"/TIConfig//TIConfig.txt";
+		File file = new File(filePath);
+		file.getParentFile().mkdir();
+
+		FileInputStream fis;
+
+		try{
+			fis = new FileInputStream(file);
+			byte[] readBytes = new byte[fis.available()];
+			fis.read(readBytes);
+			adress = new String(readBytes);
+			fis.close();
+		}catch(IOException e){
+		}
+
+		Log.d("adress","adressOf" + adress);
+
+		return adress;
+
 	}
 
 	/***************************
 	 * Wi-Fiの通信確立
 	 ***************************/
 	private void startConnect() {
+
+		wifiStatus = WifiStatus.CONNECTING;
+		bluetoothStatus = BluetoothStatus.CONNECTING;
+
 		ws = new WifiSocket();
+		bc = new BluetoothConnection();
+
 		final ProgressDialog progressDialog = new ProgressDialog(this);
 		progressDialog.setTitle("接続中");
-		progressDialog.setMessage("Wi-Fi接続 : 接続中");
+		progressDialog.setMessage(bluetoothStatus.toString() + "\n" + wifiStatus.toString());
 		progressDialog.setCancelable(true);
 		progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "キャンセル", new DialogInterface.OnClickListener() {
 			@Override
@@ -89,16 +204,52 @@ public class OutsideConnectSettingActivity extends Activity {
 		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				ws.stopConnect();
-				showErrorDialog("Wi-Fi接続に失敗しました");
+				if(ws != null){
+					ws.stopConnect();
+					ws = null;
+				}
+
+				if(bc != null){
+					bc.close();
+					bc = null;
+				}
+				showErrorDialog("Wi-Fi,Bluetooth接続に失敗しました");
 			}
 		});
 		progressDialog.show();
-		
+
+		// Bluetooth接続スレッド
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// 接続
+				//4/21 コメントアウト
+				if (targetDevice == null) {
+					bluetoothStatus=BluetoothStatus.NODEVICE;
+					bc=null;
+					refreshProgressMessage(progressDialog);
+				} else{
+					while (progressDialog.isShowing() && bluetoothStatus != BluetoothStatus.CONNECTED) {
+						bluetoothStatus = bc.connectToServer(targetDevice) ? BluetoothStatus.CONNECTED : BluetoothStatus.CONNECTING;
+
+						if (bluetoothStatus == BluetoothStatus.CONNECTED)
+							refreshProgressMessage(progressDialog);
+						else
+							Util.sleep(2000);
+					}
+				}
+			}
+
+		}).start();
+
 		// Wi-Fi接続スレッド
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				wifiStatus = ws.connectToServer(ipAddressText) ? WifiStatus.CONNECTED : WifiStatus.ERROR;
+
+				refreshProgressMessage(progressDialog);
+				/*
 				// 接続
 				if (ws.connectToServer(ipAddressText)){
 					Log.d("Ouc","El01" + ipAddressText);
@@ -112,17 +263,49 @@ public class OutsideConnectSettingActivity extends Activity {
 				}
 				else{
 					progressDialog.cancel();
-				}
+				}*/
 			}
 		}).start();
 	}
-	
+
+	private void refreshProgressMessage(final ProgressDialog dialog){
+		//Wake();
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (dialog) {
+					if(!dialog.isShowing()){
+
+					}
+					else if((bluetoothStatus == BluetoothStatus.CONNECTED || bluetoothStatus == BluetoothStatus.NODEVICE )
+							&& wifiStatus == WifiStatus.CONNECTED){ //両方接続完了
+						dialog.dismiss();
+						startOutside();
+					}
+					else if(bluetoothStatus == BluetoothStatus.ERROR){ //Bluetooth接続エラー
+						dialog.cancel();
+						showErrorDialog(bluetoothStatus.toString());
+					}
+					else if(wifiStatus == WifiStatus.ERROR){ //Wi-Fi接続エラー
+						dialog.cancel();
+						showErrorDialog(wifiStatus.toString());
+					}
+					else{ //接続中
+						dialog.setMessage(bluetoothStatus.toString() + "\n" + wifiStatus.toString());
+					}
+				}
+			}
+		});
+	}
+
 	private void startOutside(){
 		SharedVariable sh = Util.getSharedVariable(this);
 		sh.wifiSocket = this.ws;
+		sh.keyBoxBluetoothConnection= this.bc;
 		Log.d("OuC","El01");
 		startService(new Intent(this, OutsideService.class));
-
+		finish();
+		/*
 		new DialogBuilder(this)
 		.setIcon(android.R.drawable.ic_dialog_info)
 		.setTitle("設定完了")
@@ -136,6 +319,7 @@ public class OutsideConnectSettingActivity extends Activity {
 		})
 		.setPositiveButton("OK", null)
 		.show("設定完了");
+		*/
 	}
 
 	private void showIpAddressDialog(boolean b) {
@@ -171,16 +355,18 @@ public class OutsideConnectSettingActivity extends Activity {
 				}
 			}).show("Wi-Fi接続設定");
 	}
-	
+
 	private void writeBusiness(int [] ip){
 		//OutputStream out;
         String tmp="";
 		for(int i=0; i<4;i++) {
-            if (ip[i] == 0) {
-                tmp = "000";
-            } else if (ip[i] < 100) {
-                tmp = "0" + String.valueOf(ip[i]);
-            } else{
+			if (ip[i] == 0) {
+				tmp = "000";
+			} else if (ip[i] < 100 && ip[i] > 10) {
+				tmp = "0" + String.valueOf(ip[i]);
+			}else if(ip[i]<10){
+				tmp = "00" + String.valueOf(ip[i]);
+			}else{
                 tmp=String.valueOf(ip[i]);
             }
             if(i==0)ipAddressText=tmp;
@@ -189,9 +375,9 @@ public class OutsideConnectSettingActivity extends Activity {
 		String filePath = Environment.getExternalStorageDirectory() + "/TIConfig/TIConfig.txt";
 		File file = new File(filePath);
 		file.getParentFile().mkdir();
-		
+
 		FileOutputStream fos;
-		
+
 		try{
 			fos = new FileOutputStream(file, false);
 			OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
@@ -199,12 +385,12 @@ public class OutsideConnectSettingActivity extends Activity {
 			bw.write(ipAddressText);
 			bw.flush();
 			bw.close();
-			
+
 		}catch(Exception e){
 			Log.d("Vic","Vic" + e);
 		}
 	}
-	
+
 	/***************************
 	 * IPアドレス設定ダイアログ表示
 	 ***************************/
@@ -245,7 +431,44 @@ public class OutsideConnectSettingActivity extends Activity {
 				}
 			}).show("Wi-Fi接続設定");
 	}
-	
+
+	/***************************
+	 * Bluetoothデバイス選択
+	 ***************************/
+	private void showBluetoothSelectDialog() {
+		this.bu = new BluetoothUtil();
+
+		if (!this.bu.isSpported()) // 非対応デバイス
+			DialogBuilder.showErrorDialog(this, "Bluetooth非対応デバイスです。");
+		else if (!this.bu.isEnabled()) // 設定無効
+			DialogBuilder.showErrorDialog(this, "Bluetooth有効にしてください。");
+		else if (this.bu.getPairingCount() == 0) // ペアリング済みデバイスなし
+			DialogBuilder.showErrorDialog(this, "ペアリング済みのBluetooth設定がありません。");
+		else {
+			new DialogBuilder(this)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setTitle("Bluetoothデバイス選択")
+					.setItems(bu.getDeviceNames(), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							decideBluetoothDevice(bu.getDevices()[which]);
+						}
+					})
+					.setNegativeButton("キャンセル", null)
+					.show("Bluetoothデバイス選択");
+		}
+	}
+
+	/***************************
+	 * Bluetooth端末決定
+	 *
+	 * @param bluetoothDevice 選択するBluetooth端末
+	 ***************************/
+	private void decideBluetoothDevice(BluetoothDevice bluetoothDevice) {
+		this.KeyBoxBluetoothSettingButton.setText("Bluetooth設定\n\n対象 : " + bluetoothDevice.getName());
+		this.targetDevice = bluetoothDevice;
+		this.startButton.setEnabled(true);
+	}
+
 	/***************************
 	 * 物理キー押下時
 	 ***************************/

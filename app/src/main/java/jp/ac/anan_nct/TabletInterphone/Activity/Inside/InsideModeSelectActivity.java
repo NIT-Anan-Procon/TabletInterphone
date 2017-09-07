@@ -57,10 +57,10 @@ public class InsideModeSelectActivity extends Activity {
 		findViewById(R.id.settingLayout).setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v){
-				/*
+
 				startActivity(InsideSettingActivity.class);
-				*/
-				startActivity(VisiterLogActivity.class);
+
+				//startActivity(VisiterLogActivity.class);
 			}
 		});
 	}

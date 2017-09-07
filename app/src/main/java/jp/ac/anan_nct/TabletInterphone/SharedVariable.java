@@ -47,6 +47,7 @@ import android.widget.ImageView;
 
 public class SharedVariable extends Application {
 	public BluetoothConnection bluetoothConnection;
+	public BluetoothConnection keyBoxBluetoothConnection;
 	public WifiSocket wifiSocket;
 	public ImageView cameraView;
 	public ImageView cameraViewOutside;
@@ -102,7 +103,15 @@ public class SharedVariable extends Application {
 		return Status;
 	}
 	///////////////////////////////////////////////////////////////
-	
+
+
+	public synchronized void sleep(long msec){
+		try{
+			wait(msec);
+		}catch (InterruptedException e){
+		}
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//屋外側ボタン設定
 	//

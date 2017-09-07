@@ -13,7 +13,7 @@ import android.widget.NumberPicker;
 
 public class InsideHomeSettingActivity extends Activity {
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_inside_home_setting);
@@ -41,7 +41,9 @@ public class InsideHomeSettingActivity extends Activity {
 				int repeat = repeatNumberPicker.getValue();
 				
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_HOME_TURNON | turnon);
+				sharedVariable.sleep(10);
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_HOME_TURNOFF | turnoff);
+				sharedVariable.sleep(10);
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_HOME_REPEAT | repeat);
 		
 				StringBuilder sb = new StringBuilder(35)
@@ -80,4 +82,5 @@ public class InsideHomeSettingActivity extends Activity {
 		.create()
 		.show(this, "モード設定ダイアログ");
 	}
+
 }

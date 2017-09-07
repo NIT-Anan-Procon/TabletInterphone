@@ -10,6 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
 
     <Button
+        android:id="@+id/KeyBoxBluetoothSettingButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="bluetooth設定" />
+
+    <Button
         android:id="@+id/wifiSettingButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

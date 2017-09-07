@@ -116,7 +116,7 @@ public class VisiterLogActivity extends BaseActivity {
 		backButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startTIActivity(InsideConnectSettingActivity.class);
+				finish();
 			}
 		});
 		}

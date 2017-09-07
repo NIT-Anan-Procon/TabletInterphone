@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -476,5 +479,44 @@ public class VisiterCheckActivity extends BaseActivity {
 		Log.d("hahaha","hahaha00onDestroy");
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
 		super.onDestroy();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// アクションバー内に使用するメニューアイテムを注入します。
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// アクションバーアイテム上の押下を処理します。
+		switch (item.getItemId()) {
+			case R.id.action_log:
+				startActivity(new Intent(VisiterCheckActivity.this, LogListActivity.class));
+				return true;
+			case R.id.action_settings:
+				if(sharedVariable.bluetoothConnection!=null) {
+					startActivity(new Intent(VisiterCheckActivity.this, InsideModeSelectActivity.class));
+				}else{
+                    new DialogBuilder(this)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .setTitle("パトランプ未接続")
+                            .setMessage("パトランプは接続されていません")
+                            //.setCanceledOnTouchOutside(false)
+                            /*.setOnDismissListener(new DialogBuilder.OnDismissListener(){
+                                @Override
+                                protected void onDismiss(CustomDialog dialog){
+
+                                }
+                            })*/
+                            .setPositiveButton("OK", null)
+                            .show("パトランプ未接続");
+				}
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

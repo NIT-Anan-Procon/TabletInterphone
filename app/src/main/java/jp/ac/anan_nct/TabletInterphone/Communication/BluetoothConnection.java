@@ -1,9 +1,13 @@
 package jp.ac.anan_nct.TabletInterphone.Communication;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -113,8 +117,11 @@ public class BluetoothConnection{
 	 * @return データ送信成功時、trueを返す。
 	 ***************************/
 	public boolean write(int b){
+		String write = String.valueOf(b)+"\n";
 		try{
-			out.write(b);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "ASCII"));
+			writer.write(write);
+			writer.flush();
 			return true;
 		}
 		catch (Exception e){
@@ -129,8 +136,11 @@ public class BluetoothConnection{
 	 * @return 0～255の受信データを返す。データ受信失敗時、-1を返す。
 	 ***************************/
 	public int read(){
+		String read= "";
 		try{
-			return in.read();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in, "ASCII"));
+			read = reader.readLine();
+			return Integer.parseInt(read);
 		}
 		catch(Exception e){
 			return -1;

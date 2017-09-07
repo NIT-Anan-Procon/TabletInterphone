@@ -41,7 +41,9 @@ public class InsideNightSettingActivity extends Activity {
 				int repeat = repeatNumberPicker.getValue();
 				
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_NIGHT_TURNON | turnon);
+				sharedVariable.sleep(10);
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_NIGHT_TURNOFF | turnoff);
+				sharedVariable.sleep(10);
 				sharedVariable.bluetoothConnection.write(Const.BLUETOOTH_JUDGE_NIGHT_REPEAT | repeat);
 		
 				StringBuilder sb = new StringBuilder(35)

@@ -16,6 +16,13 @@
         android:text="Bluetooth設定" />
 
     <Button
+        android:id="@+id/LogSettingButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="ログ確認" />
+
+    <Button
         android:id="@+id/endPhoneCallButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

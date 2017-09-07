@@ -41,6 +41,7 @@ public class InsideConnectSettingActivity extends Activity {
 	
 	private Button bluetoothSettingButton;
 	private Button startButton;
+	private Button LogSettingButton;
 	
 	private String ipAddressText;
 	private BluetoothStatus bluetoothStatus;
@@ -58,7 +59,8 @@ public class InsideConnectSettingActivity extends Activity {
 	private enum BluetoothStatus{
 		ERROR("Bluetooth接続に失敗しました"),
 		CONNECTING("Bluetooth接続 : 接続中"),
-		CONNECTED("Bluetooth接続 : OK");
+		CONNECTED("Bluetooth接続 : OK"),
+		NODEVICE("Bluetooth接続 ： なし");
 				
 		private String message;
 		
@@ -94,8 +96,9 @@ public class InsideConnectSettingActivity extends Activity {
 		
 		bluetoothSettingButton = (Button) findViewById(R.id.bluetoothSettingButton);
 		startButton = (Button) findViewById(R.id.endPhoneCallButton);
+		LogSettingButton = (Button) findViewById(R.id.LogSettingButton);
 		
-		bluetoothSettingButton.setText("ログ確認");
+		//bluetoothSettingButton.setText("ログ確認");
 
 		bluetoothSettingButton.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
@@ -114,7 +117,7 @@ public class InsideConnectSettingActivity extends Activity {
 			    //////////////////////////////////////////////////////////////////
 			    //ログ表示/////////////////////////////////////////////////////////
 				///*
-				MoveLog();
+				//MoveLog();
 			    //*////////////////////////////////////////////////////////////////
 			    
 				//4/21追加////5/25コメントアウト
@@ -124,9 +127,8 @@ public class InsideConnectSettingActivity extends Activity {
 				//startInside();		
 				//
 				
-				/*4/21コメントアウトテスト2
+				//4/21コメントアウトテスト2
 				showBluetoothSelectDialog();
-				*/
 			}
 		});
 
@@ -134,6 +136,12 @@ public class InsideConnectSettingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				startConnect();
+			}
+		});
+		LogSettingButton.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				MoveLog();
 			}
 		});
 	}
@@ -145,7 +153,6 @@ public class InsideConnectSettingActivity extends Activity {
 	private void MoveLog(){
 		//startActivity(new Intent(this,WhoActivity.class));
 		startActivity(new Intent(this,LogListActivity.class));
-		finish();
 	}
 	///////////////////////
 	
@@ -213,17 +220,21 @@ public class InsideConnectSettingActivity extends Activity {
 			@Override
 			public void run() {
 				// 接続
-				/*4/21 コメントアウト
-				
-				while(progressDialog.isShowing() && bluetoothStatus != BluetoothStatus.CONNECTED){
-					bluetoothStatus = bc.connectToServer(targetDevice) ? BluetoothStatus.CONNECTED : BluetoothStatus.CONNECTING;
-					
-					if(bluetoothStatus == BluetoothStatus.CONNECTED)
-						refreshProgressMessage(progressDialog);
-					else
-						Util.sleep(2000);
+				//4/21 コメントアウト
+				if(targetDevice==null){
+					bluetoothStatus=BluetoothStatus.NODEVICE;
+					bc=null;
+					refreshProgressMessage(progressDialog);
+				}else {
+					while (progressDialog.isShowing() && bluetoothStatus != BluetoothStatus.CONNECTED) {
+						bluetoothStatus = bc.connectToServer(targetDevice) ? BluetoothStatus.CONNECTED : BluetoothStatus.CONNECTING;
+
+						if (bluetoothStatus == BluetoothStatus.CONNECTED)
+							refreshProgressMessage(progressDialog);
+						else
+							Util.sleep(2000);
+					}
 				}
-				*/
 			}
 			
 		}).start();
@@ -249,7 +260,8 @@ public class InsideConnectSettingActivity extends Activity {
 					if(!dialog.isShowing()){
 						
 					}
-					else if(/*bluetoothStatus == BluetoothStatus.CONNECTED 4/22コメントアウト&& */wifiStatus == WifiStatus.CONNECTED){ //両方接続完了
+					else if((bluetoothStatus == BluetoothStatus.CONNECTED || bluetoothStatus == BluetoothStatus.NODEVICE)
+							&& wifiStatus == WifiStatus.CONNECTED){ //両方接続完了
 						dialog.dismiss();
 						startInside();
 					}
