@@ -4,6 +4,7 @@ import jp.ac.anan_nct.TabletInterphone.R;
 import jp.ac.anan_nct.TabletInterphone.SharedVariable;
 import jp.ac.anan_nct.TabletInterphone.Activity.BaseActivity;
 import jp.ac.anan_nct.TabletInterphone.Utility.Util;
+
 import android.os.Bundle;
 
 import java.io.IOException;
@@ -24,45 +25,45 @@ import android.widget.TextView;
 
 
 public class LogListActivity extends BaseActivity {
-	
-	private NumberPicker NumYear;
-	private NumberPicker NumMonth;
-	
-	private Button backButton;
-	private Button enterButton;
-	
-	private Calendar calendar = Calendar.getInstance();
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.log_list);
-		NumYear = (NumberPicker) findViewById(R.id.numberPickerYear);
-		NumYear.setMaxValue(2525);
-		NumYear.setMinValue(1867);
-		NumYear.setValue(calendar.get(Calendar.YEAR));
-		
-		NumMonth = (NumberPicker) findViewById(R.id.numberPickerMonth);
-		NumMonth.setMaxValue(12);
-		NumMonth.setMinValue(1);
-		NumMonth.setValue(calendar.get(Calendar.MONTH) + 1); 
-		
-		enterButton = (Button) findViewById(R.id.Button_log_enter);
-		enterButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				sharedVariable.setLogTime(NumYear.getValue(),NumMonth.getValue());
-				startTIActivity(VisiterLogActivity.class);
-			}
-		});
-		
-		backButton = (Button) findViewById(R.id.Button_log_back);
-		backButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-	}
-	
+
+    private NumberPicker NumYear;
+    private NumberPicker NumMonth;
+
+    private Button backButton;
+    private Button enterButton;
+
+    private Calendar calendar = Calendar.getInstance();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.log_list);
+        NumYear = (NumberPicker) findViewById(R.id.numberPickerYear);
+        NumYear.setMaxValue(2525);
+        NumYear.setMinValue(1867);
+        NumYear.setValue(calendar.get(Calendar.YEAR));
+
+        NumMonth = (NumberPicker) findViewById(R.id.numberPickerMonth);
+        NumMonth.setMaxValue(12);
+        NumMonth.setMinValue(1);
+        NumMonth.setValue(calendar.get(Calendar.MONTH) + 1);
+
+        enterButton = (Button) findViewById(R.id.Button_log_enter);
+        enterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedVariable.setLogTime(NumYear.getValue(), NumMonth.getValue());
+                startTIActivity(VisiterLogActivity.class);
+            }
+        });
+
+        backButton = (Button) findViewById(R.id.Button_log_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
 }

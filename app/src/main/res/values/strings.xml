@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tablet Interphone</string>
+    <string name="app_name">安心来客システム</string>
+    <string name="title_activity_open_keybox">OpenKeyboxActivity</string>
 
 </resources>

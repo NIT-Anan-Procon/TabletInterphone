@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Settings, should always be in the overflow -->
+
+    <item android:id="@+id/open_key"
+        android:title="キーボックス開錠"
+        android:icon="@drawable/key"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_log"
-        android:title="action_log"
-        android:icon="@drawable/light_on"
+        android:title="ログ確認"
+        android:icon="@drawable/log"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_settings"
+        android:title="パトランプ設定"
+        android:icon="@drawable/option"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_settings"
-        android:title="action_settings"
-        android:icon="@drawable/light_on"
-        android:showAsAction="ifRoom" />
 </menu>

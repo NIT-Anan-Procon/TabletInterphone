@@ -17,6 +17,7 @@ import jp.ac.anan_nct.TabletInterphone.Dialog.DialogBuilder;
 import jp.ac.anan_nct.TabletInterphone.Service.InsideService;
 import jp.ac.anan_nct.TabletInterphone.Utility.BluetoothUtil;
 import jp.ac.anan_nct.TabletInterphone.Utility.Util;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
@@ -38,131 +39,129 @@ import android.app.KeyguardManager;
 
 
 public class InsideConnectByBluetoothActivity extends Activity {
-	private static final Handler handler = new Handler();
-	
-	private Button bluetoothSettingButton;
-	private Button startButton;
-	
-	private String ipAddressText;
-	private BluetoothStatus bluetoothStatus;
-	private WifiStatus wifiStatus;
-	
-	private SharedVariable sh;
+    private static final Handler handler = new Handler();
 
-	private BluetoothUtil bu;
-	private BluetoothDevice targetDevice = null;
+    private Button bluetoothSettingButton;
+    private Button startButton;
 
-	private BluetoothConnection bc;
-	private WifiSocket ws = new WifiSocket();
-	
-	private enum BluetoothStatus{
-		ERROR("Bluetooth接続に失敗しました"),
-		CONNECTING("Bluetooth接続 : 接続中"),
-		CONNECTED("Bluetooth接続 : OK");
-				
-		private String message;
-		
-		private BluetoothStatus(String message){
-			this.message = message;
-		}
-		
-		public String toString(){
-			return this.message;
-		}
-	}
-	
-	private enum WifiStatus{
-		ERROR("Wi-Fi接続に失敗しました"),
-		CONNECTING("Wi-Fi接続 : 接続待機中"),
-		CONNECTED("Wi-Fi接続 : OK");
-				
-		private String message;
-		
-		private WifiStatus(String message){
-			this.message = message;
-		}
-		
-		public String toString(){
-			return this.message;
-		}
-	}
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_inside_connect_setting);
-		
-		sh = (SharedVariable) this.getApplication();
-		
-		if(sh.vcFlag){
-			startActivity(new Intent(this,VisiterCheckActivity.class));
-			finish();
-		}
-		
-		else{
-		bluetoothSettingButton = (Button) findViewById(R.id.bluetoothSettingButton);
-		startButton = (Button) findViewById(R.id.endPhoneCallButton);
+    private String ipAddressText;
+    private BluetoothStatus bluetoothStatus;
+    private WifiStatus wifiStatus;
 
-		bluetoothSettingButton.setOnClickListener(new View.OnClickListener() {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onClick(View v) {
-				/////////////////////////////////////////////////////////////////////
-				//タブレットインターホンホームアプリ化解除//////////////////////////////////////*
-				Intent intent = new Intent();
-			    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-			    intent.setData(Uri.parse("package:jp.ac.anan_nct.TabletInterphone"));
-			    startActivity(intent);
-			    //*//////////////////////////////////////////////////////////////////
-			    ////////////////////////////////////////////////////////////////////
-			    
-			    //////////////////////////////////////////////////////////////////
-			    //ログ表示/////////////////////////////////////////////////////////
-				/*
-				MoveLog();
+    private SharedVariable sh;
+
+    private BluetoothUtil bu;
+    private BluetoothDevice targetDevice = null;
+
+    private BluetoothConnection bc;
+    private WifiSocket ws = new WifiSocket();
+
+    private enum BluetoothStatus {
+        ERROR("Bluetooth接続に失敗しました"),
+        CONNECTING("Bluetooth接続 : 接続中"),
+        CONNECTED("Bluetooth接続 : OK");
+
+        private String message;
+
+        private BluetoothStatus(String message) {
+            this.message = message;
+        }
+
+        public String toString() {
+            return this.message;
+        }
+    }
+
+    private enum WifiStatus {
+        ERROR("Wi-Fi接続に失敗しました"),
+        CONNECTING("Wi-Fi接続 : 接続待機中"),
+        CONNECTED("Wi-Fi接続 : OK");
+
+        private String message;
+
+        private WifiStatus(String message) {
+            this.message = message;
+        }
+
+        public String toString() {
+            return this.message;
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_inside_connect_setting);
+
+        sh = (SharedVariable) this.getApplication();
+
+        if (sh.vcFlag) {
+            startActivity(new Intent(this, VisiterCheckActivity.class));
+            finish();
+        } else {
+            bluetoothSettingButton = (Button) findViewById(R.id.bluetoothSettingButton);
+            startButton = (Button) findViewById(R.id.endPhoneCallButton);
+
+            bluetoothSettingButton.setOnClickListener(new View.OnClickListener() {
+                @SuppressWarnings("deprecation")
+                @Override
+                public void onClick(View v) {
+                    /////////////////////////////////////////////////////////////////////
+                    //タブレットインターホンホームアプリ化解除//////////////////////////////////////*
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:jp.ac.anan_nct.TabletInterphone"));
+                    startActivity(intent);
+                    //*//////////////////////////////////////////////////////////////////
+                    ////////////////////////////////////////////////////////////////////
+
+                    //////////////////////////////////////////////////////////////////
+                    //ログ表示/////////////////////////////////////////////////////////
+                /*
+                MoveLog();
 			    //*////////////////////////////////////////////////////////////////
-			    
-				//4/21追加////5/25コメントアウト
-				//startButton.setEnabled(true);
-				//bluetoothStatus = BluetoothStatus.CONNECTED;
-				//wifiStatus = WifiStatus.CONNECTED;
-				//startInside();		
-				//
-				
+
+                    //4/21追加////5/25コメントアウト
+                    //startButton.setEnabled(true);
+                    //bluetoothStatus = BluetoothStatus.CONNECTED;
+                    //wifiStatus = WifiStatus.CONNECTED;
+                    //startInside();
+                    //
+
 				/*4/21コメントアウトテスト2
 				showBluetoothSelectDialog();
 				*/
-			}
-		});
+                }
+            });
 
-		startButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startConnect();
-			}
-		});
-		bluetoothSettingButton.setVisibility(View.INVISIBLE);
-		startButton.setVisibility(View.INVISIBLE);
-		Log.d("LOGICRA","LOGICRA01");
-		startConnect();
-		}
-	}
-	
-	//////////////////////////
-	//0607追加				//
-	//ログ表示メソッド			//
-	//////////////////////////
-	private void MoveLog(){
-		startActivity(new Intent(this,WhoActivity.class));
-		finish();
-	}
-	///////////////////////
-	
-	//////////////////////////////////////////////////////////
-	//0526追加												//
-	//タブレットスリープ解除メソッド									//
-	//しばらく待たないと機能しない「sleep(700)」注意!					//
-	//////////////////////////////////////////////////////////
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startConnect();
+                }
+            });
+            bluetoothSettingButton.setVisibility(View.INVISIBLE);
+            startButton.setVisibility(View.INVISIBLE);
+            Log.d("LOGICRA", "LOGICRA01");
+            startConnect();
+        }
+    }
+
+    //////////////////////////
+    //0607追加				//
+    //ログ表示メソッド			//
+    //////////////////////////
+    private void MoveLog() {
+        startActivity(new Intent(this, WhoActivity.class));
+        finish();
+    }
+    ///////////////////////
+
+    //////////////////////////////////////////////////////////
+    //0526追加												//
+    //タブレットスリープ解除メソッド									//
+    //しばらく待たないと機能しない「sleep(700)」注意!					//
+    //////////////////////////////////////////////////////////
 	/*
 	private void Wake(){
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
@@ -180,48 +179,48 @@ public class InsideConnectByBluetoothActivity extends Activity {
 	}
 	*/
 
-	/***************************
-	 * BluetoothとWi-Fiの通信確立
-	 ***************************/
-	private void startConnect() {
-		ipAddressText = "プライベートIPアドレス : " + getIpAddress();
-		bluetoothStatus = BluetoothStatus.CONNECTING;
-		wifiStatus = WifiStatus.CONNECTING;
-		
-		bc = new BluetoothConnection();
-		ws = new WifiSocket();
+    /***************************
+     * BluetoothとWi-Fiの通信確立
+     ***************************/
+    private void startConnect() {
+        ipAddressText = "プライベートIPアドレス : " + getIpAddress();
+        bluetoothStatus = BluetoothStatus.CONNECTING;
+        wifiStatus = WifiStatus.CONNECTING;
 
-		final ProgressDialog progressDialog = new ProgressDialog(this);
-		progressDialog.setTitle("接続中");
-		progressDialog.setMessage(ipAddressText + "\n\n" + bluetoothStatus.toString() + "\n" + wifiStatus.toString());
-		progressDialog.setCancelable(true);
-		progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "キャンセル", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
-		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				if(ws != null){
-					ws.stopServer();
-					ws = null;
-				}
-				
-				if(bc != null){
-					bc.close();
-					bc = null;
-				}
-			}
-		});
-		progressDialog.show();
+        bc = new BluetoothConnection();
+        ws = new WifiSocket();
 
-		// Bluetooth接続スレッド
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// 接続
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("接続中");
+        progressDialog.setMessage(ipAddressText + "\n\n" + bluetoothStatus.toString() + "\n" + wifiStatus.toString());
+        progressDialog.setCancelable(true);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "キャンセル", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (ws != null) {
+                    ws.stopServer();
+                    ws = null;
+                }
+
+                if (bc != null) {
+                    bc.close();
+                    bc = null;
+                }
+            }
+        });
+        progressDialog.show();
+
+        // Bluetooth接続スレッド
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 接続
 				/*4/21 コメントアウト
 				
 				while(progressDialog.isShowing() && bluetoothStatus != BluetoothStatus.CONNECTED){
@@ -233,57 +232,53 @@ public class InsideConnectByBluetoothActivity extends Activity {
 						Util.sleep(2000);
 				}
 				*/
-			}
-			
-		}).start();
-		
-		// Wi-Fi接続スレッド
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// 接続待機
-				wifiStatus = ws.makeServer() ? WifiStatus.CONNECTED : WifiStatus.ERROR;
-				
-				refreshProgressMessage(progressDialog);
-			}
-		}).start();
-	}
-	
-	private void refreshProgressMessage(final ProgressDialog dialog){
-		//Wake();
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (dialog) {
-					if(!dialog.isShowing()){
-						
-					}
-					else if(/*bluetoothStatus == BluetoothStatus.CONNECTED 4/22コメントアウト&& */wifiStatus == WifiStatus.CONNECTED){ //両方接続完了
-						dialog.dismiss();
-						startInside();
-					}
-					else if(bluetoothStatus == BluetoothStatus.ERROR){ //Bluetooth接続エラー
-						dialog.cancel();
-						showErrorDialog(bluetoothStatus.toString());
-					}
-					else if(wifiStatus == WifiStatus.ERROR){ //Wi-Fi接続エラー
-						dialog.cancel();
-						showErrorDialog(wifiStatus.toString());
-					}
-					else{ //接続中
-						dialog.setMessage(ipAddressText + "\n\n" + bluetoothStatus.toString() + "\n" + wifiStatus.toString());
-					}
-				}
-			}
-		});
-	}
-	
-	private void startInside(){
-		SharedVariable sh = Util.getSharedVariable(this);
-		sh.initialRingtone(this);
-		sh.wifiSocket = this.ws;
-		sh.bluetoothConnection = this.bc;
-		startService(new Intent(this, InsideService.class));
+            }
+
+        }).start();
+
+        // Wi-Fi接続スレッド
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 接続待機
+                wifiStatus = ws.makeServer() ? WifiStatus.CONNECTED : WifiStatus.ERROR;
+
+                refreshProgressMessage(progressDialog);
+            }
+        }).start();
+    }
+
+    private void refreshProgressMessage(final ProgressDialog dialog) {
+        //Wake();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (dialog) {
+                    if (!dialog.isShowing()) {
+
+                    } else if (/*bluetoothStatus == BluetoothStatus.CONNECTED 4/22コメントアウト&& */wifiStatus == WifiStatus.CONNECTED) { //両方接続完了
+                        dialog.dismiss();
+                        startInside();
+                    } else if (bluetoothStatus == BluetoothStatus.ERROR) { //Bluetooth接続エラー
+                        dialog.cancel();
+                        showErrorDialog(bluetoothStatus.toString());
+                    } else if (wifiStatus == WifiStatus.ERROR) { //Wi-Fi接続エラー
+                        dialog.cancel();
+                        showErrorDialog(wifiStatus.toString());
+                    } else { //接続中
+                        dialog.setMessage(ipAddressText + "\n\n" + bluetoothStatus.toString() + "\n" + wifiStatus.toString());
+                    }
+                }
+            }
+        });
+    }
+
+    private void startInside() {
+        SharedVariable sh = Util.getSharedVariable(this);
+        sh.initialRingtone(this);
+        sh.wifiSocket = this.ws;
+        sh.bluetoothConnection = this.bc;
+        startService(new Intent(this, InsideService.class));
 		
 		/*
 		new DialogBuilder(this)
@@ -300,74 +295,73 @@ public class InsideConnectByBluetoothActivity extends Activity {
 		.setPositiveButton("OK", null)
 		.show("設定完了");
 		*/
-	}
+    }
 
-	/***************************
-	 * プライベートIPアドレス取得
-	 *
-	 * @return 自身のプライベートIPアドレスを返す。
-	 ***************************/
-	private String getIpAddress() {
-		WifiManager manager = (WifiManager) getSystemService(WIFI_SERVICE);
-		WifiInfo info = manager.getConnectionInfo();
-		
-		// IPアドレスを取得
-		int ipAdr = info.getIpAddress();
-		return Util.getIpAddressText(ipAdr & 0xff, (ipAdr >> 8) & 0xff, (ipAdr >> 16) & 0xff, (ipAdr >> 24) & 0xff);
-	}
+    /***************************
+     * プライベートIPアドレス取得
+     *
+     * @return 自身のプライベートIPアドレスを返す。
+     ***************************/
+    private String getIpAddress() {
+        WifiManager manager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
 
-	/***************************
-	 * Bluetoothデバイス選択
-	 ***************************/
-	private void showBluetoothSelectDialog() {
-		this.bu = new BluetoothUtil();
-		
-		if (!this.bu.isSpported()) // 非対応デバイス
-			DialogBuilder.showErrorDialog(this, "Bluetooth非対応デバイスです。");
-		else if (!this.bu.isEnabled()) // 設定無効
-			DialogBuilder.showErrorDialog(this, "Bluetooth有効にしてください。");
-		else if (this.bu.getPairingCount() == 0) // ペアリング済みデバイスなし
-			DialogBuilder.showErrorDialog(this, "ペアリング済みのBluetooth設定がありません。");
-		else {
-			new DialogBuilder(this)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setTitle("Bluetoothデバイス選択")
-				.setItems(bu.getDeviceNames(), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						decideBluetoothDevice(bu.getDevices()[which]);
-					}
-				})
-				.setNegativeButton("キャンセル", null)
-				.show("Bluetoothデバイス選択");
-		}
-	}
+        // IPアドレスを取得
+        int ipAdr = info.getIpAddress();
+        return Util.getIpAddressText(ipAdr & 0xff, (ipAdr >> 8) & 0xff, (ipAdr >> 16) & 0xff, (ipAdr >> 24) & 0xff);
+    }
 
-	/***************************
-	 * Bluetooth端末決定
-	 * 
-	 * @param bluetoothDevice 選択するBluetooth端末
-	 ***************************/
-	private void decideBluetoothDevice(BluetoothDevice bluetoothDevice) {
-		this.bluetoothSettingButton.setText("Bluetooth設定\n\n対象 : " + bluetoothDevice.getName());
-		this.targetDevice = bluetoothDevice;
-		this.startButton.setEnabled(true);
-	}
-	
-	/***************************
-	 * 物理キー押下時
-	 ***************************/
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event){
-		if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK){
-			startActivity(new Intent(this, StartActivity.class));
-			finish();
-			return true;
-		}
-		else
-			return super.onKeyDown(keyCode, event);
-	}
-	
-	private void showErrorDialog(String message){
-		DialogBuilder.showErrorDialog(this, message);
-	}
+    /***************************
+     * Bluetoothデバイス選択
+     ***************************/
+    private void showBluetoothSelectDialog() {
+        this.bu = new BluetoothUtil();
+
+        if (!this.bu.isSpported()) // 非対応デバイス
+            DialogBuilder.showErrorDialog(this, "Bluetooth非対応デバイスです。");
+        else if (!this.bu.isEnabled()) // 設定無効
+            DialogBuilder.showErrorDialog(this, "Bluetooth有効にしてください。");
+        else if (this.bu.getPairingCount() == 0) // ペアリング済みデバイスなし
+            DialogBuilder.showErrorDialog(this, "ペアリング済みのBluetooth設定がありません。");
+        else {
+            new DialogBuilder(this)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setTitle("Bluetoothデバイス選択")
+                    .setItems(bu.getDeviceNames(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            decideBluetoothDevice(bu.getDevices()[which]);
+                        }
+                    })
+                    .setNegativeButton("キャンセル", null)
+                    .show("Bluetoothデバイス選択");
+        }
+    }
+
+    /***************************
+     * Bluetooth端末決定
+     *
+     * @param bluetoothDevice 選択するBluetooth端末
+     ***************************/
+    private void decideBluetoothDevice(BluetoothDevice bluetoothDevice) {
+        this.bluetoothSettingButton.setText("Bluetooth設定\n\n対象 : " + bluetoothDevice.getName());
+        this.targetDevice = bluetoothDevice;
+        this.startButton.setEnabled(true);
+    }
+
+    /***************************
+     * 物理キー押下時
+     ***************************/
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(this, StartActivity.class));
+            finish();
+            return true;
+        } else
+            return super.onKeyDown(keyCode, event);
+    }
+
+    private void showErrorDialog(String message) {
+        DialogBuilder.showErrorDialog(this, message);
+    }
 }

@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/Pop_Dialog_Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000000"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
     </RelativeLayout>
 
